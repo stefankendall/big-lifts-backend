@@ -4,6 +4,14 @@ gem 'rails', '3.2.8'
 
 group :test, :development do
   gem 'sqlite3'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
+
+group :test do
+  gem 'faker'
+  gem 'launchy'
+  gem 'guard-rspec'
 end
 
 group :production do
