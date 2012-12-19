@@ -6,6 +6,6 @@ describe User do
   end
 
   it "is invalid without a name" do
-    FactoryGirl.build(:user, name: nil).should_not be_valid
+    FactoryGirl.build(:user, username: nil).should_not be_valid
   end
 end
