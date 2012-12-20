@@ -1,12 +1,11 @@
 class UsersController < ApplicationController
   def create
-    user = User.create(params[:user])
+    user = User.create(:username => params[:username], :password => params[:password])
     if user.save
-      response.status = 201
-      render :json => user
+      render :json => user, :status => :created
     else
-      response.status = 400
-      render :json => {:status => :error}
+      logger.error user.errors
+      render :json => {:status => :error, :errors => user.errors}, :status => :bad_request
     end
   end
 end

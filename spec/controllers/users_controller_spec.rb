@@ -13,6 +13,12 @@ describe UsersController do
     end
 
     context "without username and password" do
+      attributes = {}
+
+      it "responds with 400" do
+        post :create, attributes
+        response.status.should == 400
+      end
     end
   end
 end
