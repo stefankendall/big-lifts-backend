@@ -8,4 +8,9 @@ describe User do
   it "is invalid without a name" do
     FactoryGirl.build(:user, username: nil).should_not be_valid
   end
+
+  it "prevents username duplication" do
+    FactoryGirl.create(:user, username: 'ted').should be_valid
+    FactoryGirl.build(:user, username: 'ted').should_not be_valid
+  end
 end

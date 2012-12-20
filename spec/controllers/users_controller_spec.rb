@@ -20,5 +20,15 @@ describe UsersController do
         response.status.should == 400
       end
     end
+
+    it "should block duplicate username creations" do
+      attributes = FactoryGirl.attributes_for :user
+      post :create, attributes
+      response.status.should == 201
+
+      post :create, attributes
+      response.status.should == 400
+      puts response.body
+    end
   end
 end
