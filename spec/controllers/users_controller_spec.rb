@@ -23,9 +23,11 @@ describe UsersController do
     context "without username and password" do
       attributes = {}
 
-      it "responds with 400" do
+      it "should generate a username is none is provided" do
         post :create, attributes
-        response.status.should == 400
+        response.status.should == 201
+        ActiveSupport::JSON.decode(response.body)["user"]["username"].should_not == nil
+        ActiveSupport::JSON.decode(response.body)["user"]["password"].should_not == nil
       end
     end
 

@@ -1,8 +1,9 @@
 class UsersController < ApplicationController
   def create
+    username = params[:username] || UsernameGenerator.generate
     password = params[:password] || PasswordGenerator.generate
 
-    user = User.new({username: params[:username], password: password})
+    user = User.new({username: username, password: password})
     if user.save
       render :json => {:user => user.as_json}, :status => :created
     else
