@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  filter_parameter_logging :password
-
   def create
     username = params[:username] || UsernameGenerator.generate
     password = params[:password] || PasswordGenerator.generate
