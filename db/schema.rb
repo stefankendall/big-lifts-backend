@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121220195820) do
+ActiveRecord::Schema.define(:version => 20121221162208) do
+
+  create_table "logs", :force => true do |t|
+    t.string   "name"
+    t.float    "weight"
+    t.integer  "sets"
+    t.integer  "reps"
+    t.integer  "expected_reps"
+    t.integer  "cycle"
+    t.integer  "week"
+    t.string   "notes"
+    t.datetime "date"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.integer  "user_id"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "username"
@@ -21,5 +36,4 @@ ActiveRecord::Schema.define(:version => 20121220195820) do
   end
 
   add_index "users", ["username"], :name => "index_users_on_username", :unique => true
-
 end
