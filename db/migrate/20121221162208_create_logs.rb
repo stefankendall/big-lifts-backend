@@ -5,15 +5,13 @@ class CreateLogs < ActiveRecord::Migration
       t.float :weight
       t.integer :sets
       t.integer :reps
-      t.integer :expected_reps
-      t.integer :cycle
-      t.integer :week
       t.string :notes
       t.timestamp :date
 
-      t.timestamps
+      t.references :specific_workout, :polymorphic => true
+      t.references :workout
 
-      t.references :user
+      t.timestamps
     end
   end
 end
