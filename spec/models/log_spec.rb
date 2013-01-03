@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Log do
   it "should be addable to workouts" do
-    workout = FactoryGirl.create :workout, :user => FactoryGirl.build(:user)
+    workout = FactoryGirl.build :workout, :user => FactoryGirl.build(:user)
     workout.logs << Log.new(name: 'lift', weight: 400, sets: 5, reps: 3)
     workout.save()
 
@@ -10,8 +10,7 @@ describe Log do
   end
 
   it "should be able to retrieve specific workouts" do
-    workout = FactoryGirl.create :workout, :user => FactoryGirl.build(:user)
-    log = FactoryGirl.build :log, :workout => workout
+    log = FactoryGirl.build :log
     w531workout = FactoryGirl.build :w531
     log.specific_workout = w531workout
     log.save!

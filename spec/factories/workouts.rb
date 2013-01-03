@@ -2,5 +2,6 @@
 
 FactoryGirl.define do
   factory :workout do
+    local_workout_id Random.rand(100)
   end
 end
