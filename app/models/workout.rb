@@ -1,6 +1,6 @@
 class Workout < ActiveRecord::Base
   belongs_to :user
-  has_many :logs, :autosave => true
+  has_many :logs, :autosave => true, :dependent => :destroy
 
   attr_accessible :local_workout_id, :logs
 
