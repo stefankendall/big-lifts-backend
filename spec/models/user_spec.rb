@@ -16,11 +16,7 @@ describe User do
 
   it "hashes passwords on save" do
     user = FactoryGirl.create(:user, password: 'pass')
-    hashed_password = user.password.to_s
-    hashed_password.should_not == 'pass'
-
-    user.username = "user5"
-    user.save()
-    user.password.to_s.should == hashed_password
+    user.authenticate('pass').should be_true
+    user.authenticate('pass2').should be_false
   end
 end

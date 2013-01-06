@@ -4,12 +4,12 @@ describe LogController do
   let(:user) { create_user() }
   describe "POST #create" do
     it "will fail to save logs without an associated workout" do
-      post :create, {:username => user.username}
+      post :create, {:username => user.username, :password => user.password}
       response.status.should == 400
     end
 
     it "will fail to save logs without a specified user" do
-      post :create, {:workout_id => '1', :logs => [{sets: 5}]}
+      post :create, {:username => user.username, :password => user.password, :workout_id => '1', :logs => [{sets: 5}]}
       response.status.should == 401
     end
 
@@ -26,8 +26,8 @@ describe LogController do
 
   describe "PUT #update" do
     it "will update existing logs" do
-      post :create, {:username => user.username, :workout_id => '1', :logs => [{sets: 5}]}
-      put :update, {:id => '1', :username => user.username, :workout_id => '1', :logs => [{sets: 6}, {reps: 5}]}
+      post :create, {:username => user.username, :password => user.password, :workout_id => '1', :logs => [{sets: 5}]}
+      put :update, {:id => '1', :username => user.username, :password => user.password, :workout_id => '1', :logs => [{sets: 6}, {reps: 5}]}
       get :index, {:username => user.username, :password => user.password}
       ActiveSupport::JSON.decode(response.body).length.should == 1
       ActiveSupport::JSON.decode(response.body)[0]["logs"].length.should == 2
