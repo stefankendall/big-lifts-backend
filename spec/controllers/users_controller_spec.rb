@@ -28,6 +28,7 @@ describe UsersController do
         response.status.should == 201
         ActiveSupport::JSON.decode(response.body)["user"]["username"].should_not == nil
         ActiveSupport::JSON.decode(response.body)["user"]["password"].should_not == nil
+        ActiveSupport::JSON.decode(response.body)["user"]["password"].length.should == 8
       end
     end
 
