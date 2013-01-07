@@ -2,9 +2,9 @@ class LogController < ApplicationController
   before_filter :authenticate_user
 
   def authenticate_user
-    @user = User.find_by_username(params[:username])
-    unless @user and @user.authenticate(params[:password])
-      render :json => {:status => :error}, :status => :unauthorized
+    authenticate_or_request_with_http_basic do |username, password|
+      @user = User.find_by_username(username)
+      @user and @user.authenticate(password)
     end
   end
 
