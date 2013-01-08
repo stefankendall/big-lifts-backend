@@ -58,4 +58,7 @@ BigLiftsBackend::Application.routes.draw do
 
   resources :users
   resources :log
+
+  match '/users', to: 'cors#preflight', via: :options
+  match '/log', to: 'cors#preflight', via: :options
 end
