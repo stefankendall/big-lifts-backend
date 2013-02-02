@@ -2,4 +2,8 @@ class Log < ActiveRecord::Base
   belongs_to :workout
   belongs_to :specific_workout, :polymorphic => true
   attr_accessible :date, :name, :notes, :reps, :sets, :weight, :workout
+
+  def as_json(options={})
+    super(options.merge(:include => [:specific_workout]))
+  end
 end

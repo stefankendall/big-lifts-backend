@@ -28,6 +28,17 @@ describe LogController do
       post :create, {:workout_id => '1', :logs => [{sets: 5}]}
       response.status.should == 200
     end
+
+    it "will save 5/3/1 workouts with 5/3/1 data" do
+      post :create, {:workout_id => '1', :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      response.status.should == 200
+
+      get :index
+
+      log = ActiveSupport::JSON.decode(response.body)[0]["logs"][0]
+      log['sets'].should == 5
+      log['specific_workout']['cycle'].should == 5
+    end
   end
 
   describe "PUT #update" do

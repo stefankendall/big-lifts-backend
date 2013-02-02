@@ -6,4 +6,8 @@ class Workout < ActiveRecord::Base
 
   validates :local_workout_id, :presence => true
   validates :logs, :presence => true
+
+  def as_json(options={})
+    super(options.merge(:include => {:logs => {:include => :specific_workout}}))
+  end
 end

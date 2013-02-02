@@ -18,4 +18,15 @@ describe Log do
     log.errors.should be_empty
     log.specific_workout.should_not be_nil
   end
+
+  it "should hydrate specific workouts when serializing to json" do
+    log = FactoryGirl.build :log
+    w531workout = FactoryGirl.build :w531
+    log.specific_workout = w531workout
+    log.save!
+
+    json = ActiveSupport::JSON.decode(log.to_json)
+    json['specific_workout'].should_not be_nil
+  end
+
 end
