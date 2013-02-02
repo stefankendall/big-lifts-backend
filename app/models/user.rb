@@ -9,10 +9,20 @@ class User < ActiveRecord::Base
   validates :username, :presence => true, :uniqueness => true
   validates :password_digest, :presence => true
 
+  validate :no_duplicate_workouts
+
   def as_json(options = {})
     {
         username: self.username,
         password: self.password
     }
+  end
+
+  private
+  def no_duplicate_workouts
+    workout_ids = self.workouts().collect { |w| w.local_workout_id }
+    if workout_ids.length > 0 and workout_ids.length != workout_ids.uniq.length
+      errors.add(:workouts, "Duplicate workout ids")
+    end
   end
 end

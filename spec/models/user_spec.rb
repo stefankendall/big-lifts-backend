@@ -19,4 +19,12 @@ describe User do
     user.authenticate('pass').should be_true
     user.authenticate('pass2').should be_false
   end
+
+  it "does not allow duplicate workouts" do
+    user = FactoryGirl.create(:user, password: 'pass')
+    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :local_workout_id => 9)
+    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :local_workout_id => 9)
+
+    user.should_not be_valid
+  end
 end
