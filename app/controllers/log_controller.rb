@@ -15,12 +15,15 @@ class LogController < ApplicationController
       params[:logs].each { |l| add_log_to_workout workout, l }
     end
 
+    existing = @user.workouts().find { |w| w.local_workout_id == workout.local_workout_id }
+    existing.destroy() if existing
+
     @user.workouts() << workout
 
     if @user.save
       render :json => {}, :status => :ok
     else
-      render :json => {:status => :error, :errors => workout.errors}, :status => :bad_request
+      render :json => {:status => :error, :errors => @user.errors}, :status => :bad_request
     end
   end
 

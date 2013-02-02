@@ -39,6 +39,13 @@ describe LogController do
       log['sets'].should == 5
       log['specific_workout']['cycle'].should == 5
     end
+
+    it "will wipe existing logs for workout posts with same ids" do
+      post :create, {:workout_id => '1', :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      post :create, {:workout_id => '1', :logs => [{sets: 2, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      get :index
+      ActiveSupport::JSON.decode(response.body).length.should == 1
+    end
   end
 
   describe "PUT #update" do
