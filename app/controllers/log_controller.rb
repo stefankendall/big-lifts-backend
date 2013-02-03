@@ -9,13 +9,13 @@ class LogController < ApplicationController
   end
 
   def create
-    workout = Workout.new(:local_workout_id => params[:workout_id])
+    workout = Workout.new(:workout_id => params[:workout_id])
 
     if params[:logs]
       params[:logs].each { |l| add_log_to_workout workout, l }
     end
 
-    existing = @user.workouts().find { |w| w.local_workout_id == workout.local_workout_id }
+    existing = @user.workouts().find { |w| w.workout_id == workout.workout_id }
     existing.destroy() if existing
 
     @user.workouts() << workout
@@ -41,7 +41,7 @@ class LogController < ApplicationController
   end
 
   def update
-    workout = @user.workouts().find { |w| w.local_workout_id == params[:id] }
+    workout = @user.workouts().find { |w| w.workout_id == params[:id] }
     workout.logs.delete_all()
     params[:logs].each { |l| workout.logs.build l } if params[:logs]
 

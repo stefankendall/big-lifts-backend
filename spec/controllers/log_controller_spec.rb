@@ -62,7 +62,7 @@ describe LogController do
   describe "GET #index" do
     it "returns all workouts for a user" do
       logs = [Log.create({:sets => 5, :reps => 3, name: "Press"}), Log.create({:sets => 5, :reps => 3, name: 'Power Clean'})]
-      user.workouts() << Workout.create(local_workout_id: '1', logs: logs)
+      user.workouts() << Workout.create(workout_id: '1', logs: logs)
 
       get :index
       ActiveSupport::JSON.decode(response.body).length.should == 1

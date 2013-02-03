@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :workout do
-    sequence(:local_workout_id)
+    sequence(:workout_id)
   end
 end

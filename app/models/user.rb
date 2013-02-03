@@ -20,7 +20,7 @@ class User < ActiveRecord::Base
 
   private
   def no_duplicate_workouts
-    workout_ids = self.workouts().collect { |w| w.local_workout_id }
+    workout_ids = self.workouts().collect { |w| w.workout_id }
     if workout_ids.length > 0 and workout_ids.length != workout_ids.uniq.length
       errors.add(:workouts, "Duplicate workout ids")
     end

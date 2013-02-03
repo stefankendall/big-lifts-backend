@@ -22,8 +22,8 @@ describe User do
 
   it "does not allow duplicate workouts" do
     user = FactoryGirl.create(:user, password: 'pass')
-    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :local_workout_id => 9)
-    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :local_workout_id => 9)
+    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :workout_id => 9)
+    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :workout_id => 9)
 
     user.should_not be_valid
   end
