@@ -1,5 +1,5 @@
 class LogController < ApplicationController
-  skip_before_filter  :verify_authenticity_token
+  skip_before_filter :verify_authenticity_token
   before_filter :authenticate_user
 
   def authenticate_user
@@ -16,14 +16,17 @@ class LogController < ApplicationController
       params[:logs].each { |l| add_log_to_workout workout, l }
     end
 
-    existing = @user.workouts().find { |w| w.workout_id == workout.workout_id }
-    existing.destroy() if existing
+    begin
+      User.transaction do
+        @user.workouts().select { |w| w.workout_id == workout.workout_id }.each do |existing|
+          @user.workouts().delete existing
+        end
 
-    @user.workouts() << workout
-
-    if @user.save
-      render :json => {}, :status => :ok
-    else
+        @user.workouts() << workout
+        @user.save!
+        render :json => {}, :status => :ok
+      end
+    rescue
       render :json => {:status => :error, :errors => @user.errors}, :status => :bad_request
     end
   end
@@ -40,18 +43,6 @@ class LogController < ApplicationController
             when '5/3/1'
               W531.new(specific[:data])
           end
-    end
-  end
-
-  def update
-    workout = @user.workouts().find { |w| w.workout_id == params[:id] }
-    workout.logs.delete_all()
-    params[:logs].each { |l| workout.logs.build l } if params[:logs]
-
-    if workout.save
-      render :json => {}, :status => :ok
-    else
-      render :json => {:status => :error, :errors => workout.errors}, :status => :bad_request
     end
   end
 

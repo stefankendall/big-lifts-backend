@@ -15,23 +15,23 @@ describe LogController do
 
     it "will fail to save logs without a specified user" do
       request.env['HTTP_AUTHORIZATION'] = nil
-      post :create, {:workout_id => '1', :logs => [{sets: 5}]}
+      post :create, {:workout_id => 1, :logs => [{sets: 5}]}
       response.status.should == 401
     end
 
     it "will not save workouts with an empty log set" do
-      post :create, {:workout_id => '1'}
+      post :create, {:workout_id => 1}
       response.status.should == 400
     end
 
     it "will save workouts with an associated log" do
-      post :create, {:workout_id => '1', :logs => [{sets: 5}]}
+      post :create, {:workout_id => 1, :logs => [{sets: 5}]}
       response.status.should == 200
     end
 
     it "will save log dates in unix timestamps with an associated log" do
       timestamp = 141471717
-      post :create, {:workout_id => '1', :logs => [{sets: 5, date: timestamp}]}
+      post :create, {:workout_id => 1, :logs => [{sets: 5, date: timestamp}]}
       response.status.should == 200
 
       get :index
@@ -40,7 +40,7 @@ describe LogController do
 
 
     it "will save 5/3/1 workouts with 5/3/1 data" do
-      post :create, {:workout_id => '1', :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      post :create, {:workout_id => 1, :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
       response.status.should == 200
 
       get :index
@@ -51,21 +51,12 @@ describe LogController do
     end
 
     it "will wipe existing logs for workout posts with same ids" do
-      post :create, {:workout_id => '1', :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
-      post :create, {:workout_id => '1', :logs => [{sets: 2, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      post :create, {:workout_id => 1, :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      post :create, {:workout_id => 1, :logs => [{sets: 2, specific: {type: '5/3/1', data: {cycle: 5}}}]}
       get :index
       ActiveSupport::JSON.decode(response.body).length.should == 1
-    end
-  end
 
-  describe "PUT #update" do
-    it "will update existing logs" do
-      post :create, {:workout_id => '1', :logs => [{sets: 5}]}
-      put :update, {:id => '1', :workout_id => '1', :logs => [{sets: 6}, {reps: 5}]}
-      get :index
-      ActiveSupport::JSON.decode(response.body).length.should == 1
-      ActiveSupport::JSON.decode(response.body)[0]["logs"].length.should == 2
-      Log.count().should == 2
+      Workout.count().should == 1
     end
   end
 

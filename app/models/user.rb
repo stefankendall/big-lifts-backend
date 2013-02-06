@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   has_secure_password
 
   attr_accessible :username, :password
-  has_many :workouts
+  has_many :workouts, :dependent => :destroy
 
   validates :username, :presence => true, :uniqueness => true
   validates :password_digest, :presence => true
