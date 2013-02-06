@@ -29,6 +29,8 @@ class LogController < ApplicationController
 
   def add_log_to_workout(workout, log_data)
     specific = log_data.delete :specific
+
+    log_data['date'] = Time.at(log_data['date'].to_i)
     log = workout.logs.build log_data
 
     if specific
