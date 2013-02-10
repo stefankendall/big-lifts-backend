@@ -18,9 +18,7 @@ class LogController < ApplicationController
 
     begin
       User.transaction do
-        @user.workouts().select { |w| w.workout_id == workout.workout_id }.each do |existing|
-          @user.workouts().delete existing
-        end
+        @user.delete_workout_by_id workout.workout_id
 
         @user.workouts() << workout
         @user.save!
@@ -48,5 +46,10 @@ class LogController < ApplicationController
 
   def index
     render :json => @user.workouts.to_json()
+  end
+
+  def destroy
+    @user.delete_workout_by_id params[:id].to_i
+    render :json => {}, :status => :ok
   end
 end
