@@ -29,4 +29,11 @@ describe Log do
     json['specific_workout'].should_not be_nil
   end
 
+  it "should return date timestamps" do
+    timestamp = 1412419292
+    log = FactoryGirl.create :log, :date => Time.at(timestamp)
+    json = ActiveSupport::JSON.decode(log.to_json)
+    json['date'].should == timestamp
+  end
+
 end

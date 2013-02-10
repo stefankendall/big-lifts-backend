@@ -8,6 +8,8 @@ class Workout < ActiveRecord::Base
   validates :logs, :presence => true
 
   def as_json(options={})
-    super(options.merge(:include => {:logs => {:include => :specific_workout}}))
+    json = super(options.merge(:include => {:logs => {:include => :specific_workout}}))
+    json[:logs] = logs.collect { |log| log.as_json }
+    json
   end
 end

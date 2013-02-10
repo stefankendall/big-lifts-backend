@@ -35,7 +35,7 @@ describe LogController do
       response.status.should == 200
 
       get :index
-      ActiveSupport::JSON.decode(response.body)[0]["logs"][0]['date'].should == "1974-06-26T09:41:57Z"
+      ActiveSupport::JSON.decode(response.body)[0]["logs"][0]['date'].should == timestamp
     end
 
 

@@ -4,6 +4,8 @@ class Log < ActiveRecord::Base
   attr_accessible :date, :name, :notes, :reps, :sets, :weight, :workout
 
   def as_json(options={})
-    super(options.merge(:include => [:specific_workout]))
+    json = super(options.merge(:include => [:specific_workout]))
+    json['date'] = date.to_i
+    json
   end
 end
