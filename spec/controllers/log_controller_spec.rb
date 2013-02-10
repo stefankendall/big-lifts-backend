@@ -78,13 +78,6 @@ describe LogController do
       get :index
       ActiveSupport::JSON.decode(response.body).length.should == 0
     end
-
-    it "should leave existing workouts non matching alone" do
-      post :create, {:workout_id => 1, :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
-      delete :destroy, {:id => 2}
-      get :index
-      ActiveSupport::JSON.decode(response.body).length.should == 1
-    end
   end
 
   def create_user

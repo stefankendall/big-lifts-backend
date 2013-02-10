@@ -49,7 +49,7 @@ class LogController < ApplicationController
   end
 
   def destroy
-    @user.delete_workout_by_id params[:id].to_i
+    @user.workouts.destroy_all
     render :json => {}, :status => :ok
   end
 end
