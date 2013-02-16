@@ -2,13 +2,6 @@ class LogController < ApplicationController
   skip_before_filter :verify_authenticity_token
   before_filter :authenticate_user
 
-  def authenticate_user
-    authenticate_or_request_with_http_basic do |username, password|
-      @user = User.find_by_username(username)
-      @user and @user.authenticate(password)
-    end
-  end
-
   def create
     workout = Workout.new(:workout_id => params[:workout_id])
 
