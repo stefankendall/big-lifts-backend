@@ -23,22 +23,39 @@ class UsersController < ApplicationController
       return
     end
 
-    if username && @user.username != username
+    if @user.username != username
       existing_user = User.find_by_username username
-      if existing_user && BCrypt::Password.new(existing_user.password_digest) != password
-        render :status => :bad_request, :json => {:status => 'user exists, bad password'}
+
+      if existing_user
+        handle_existing_user password, existing_user
         return
       end
-
-      @user.username = username
     end
 
+    messages = []
+    if @user.username != username
+      messages.push "Username changed!"
+    end
+    if BCrypt::Password.new(@user.password_digest) != password
+      messages.push "Password changed!"
+    end
+
+    @user.username = username
     @user.password = password
 
     if @user.save
-      render :status => :ok, :json => {}
+      render :status => :ok, :json => {:status => messages.join(' ')}
     else
       render :status => :unprocessable_entity, :json => {}
+    end
+  end
+
+  def handle_existing_user password, existing_user
+    if BCrypt::Password.new(existing_user.password_digest) != password
+      render :status => :bad_request, :json => {:status => 'User exists, bad password'}
+    else
+      @user.destroy
+      render :status => :ok, :json => {:status => 'User recovered'}
     end
   end
 end

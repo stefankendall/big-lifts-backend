@@ -72,6 +72,7 @@ describe UsersController do
 
       response.status.should == 200
       user = User.find_by_username(user.username)
+      ActiveSupport::JSON.decode(response.body)["status"].should == 'Password changed!'
       BCrypt::Password.new(user.password_digest).should == '123'
     end
 
@@ -79,9 +80,10 @@ describe UsersController do
       user1 = FactoryGirl.create(:user)
       new_username = FactoryGirl.attributes_for(:user)[:username]
       request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user1.username + ":" + user1.password)
-      put :update, {:id => 1, :username => new_username, :password => 'blah'}
+      put :update, {:id => 1, :username => new_username, :password => user1.password}
 
       response.status.should == 200
+      ActiveSupport::JSON.decode(response.body)["status"].should == 'Username changed!'
       user1.reload
       user1.username.should == new_username
     end
@@ -93,7 +95,18 @@ describe UsersController do
       put :update, {:id => 1, :username => user2.username, :password => 'blah'}
 
       response.status.should == 400
-      ActiveSupport::JSON.decode(response.body)["status"].should == 'user exists, bad password'
+      ActiveSupport::JSON.decode(response.body)["status"].should == 'User exists, bad password'
+    end
+
+    it "should allow correct password when trying to take over existing username" do
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user1.username + ":" + user1.password)
+      put :update, {:id => 1, :username => user2.username, :password => user2.password}
+
+      response.status.should == 200
+      ActiveSupport::JSON.decode(response.body)["status"].should == 'User recovered'
+      User.count().should == 1
     end
   end
 end
