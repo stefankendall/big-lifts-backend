@@ -18,18 +18,22 @@ class UsersController < ApplicationController
     username = params[:username]
     password = params[:password]
 
-    unless username || password
+    unless username && password
       render :status => :bad_request, :json => {}
       return
     end
 
-    if password
-      @user.password = password
-    end
+    if username && @user.username != username
+      existing_user = User.find_by_username username
+      if existing_user && BCrypt::Password.new(existing_user.password_digest) != password
+        render :status => :bad_request, :json => {:status => 'user exists, bad password'}
+        return
+      end
 
-    if username
       @user.username = username
     end
+
+    @user.password = password
 
     if @user.save
       render :status => :ok, :json => {}

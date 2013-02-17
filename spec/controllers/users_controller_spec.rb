@@ -68,34 +68,32 @@ describe UsersController do
     it "should return OK with correct username and password, and update the password" do
       user = FactoryGirl.create(:user, password: 'pass')
       request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user.username + ":" + user.password)
-      put :update, {:id => 1, :password => '123'}
+      put :update, {:id => 1, :username => user.username, :password => '123'}
 
       response.status.should == 200
       user = User.find_by_username(user.username)
       BCrypt::Password.new(user.password_digest).should == '123'
     end
 
-
-    it "should return unprocessable entity if a username already exists that is being requested" do
-      user1 = FactoryGirl.create(:user)
-      user2 = FactoryGirl.create(:user)
-      request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user1.username + ":" + user1.password)
-      put :update, {:id => 1, :username => user2.username}
-
-      response.status.should == 422
-      user1.reload
-      user1.username.should_not == user2.username
-    end
-
     it "should change usernames when they are non-conflicting" do
       user1 = FactoryGirl.create(:user)
       new_username = FactoryGirl.attributes_for(:user)[:username]
       request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user1.username + ":" + user1.password)
-      put :update, {:id => 1, :username => new_username}
+      put :update, {:id => 1, :username => new_username, :password => 'blah'}
 
       response.status.should == 200
       user1.reload
       user1.username.should == new_username
+    end
+
+    it "should prevent bad password when trying to take over existing username" do
+      user1 = FactoryGirl.create(:user)
+      user2 = FactoryGirl.create(:user)
+      request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user1.username + ":" + user1.password)
+      put :update, {:id => 1, :username => user2.username, :password => 'blah'}
+
+      response.status.should == 400
+      ActiveSupport::JSON.decode(response.body)["status"].should == 'user exists, bad password'
     end
   end
 end
