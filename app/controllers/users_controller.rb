@@ -19,7 +19,8 @@ class UsersController < ApplicationController
     password = params[:password]
 
     unless username || password
-      render :status => :bad_request
+      render :status => :bad_request, :json => {}
+      return
     end
 
     if password

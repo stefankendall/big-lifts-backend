@@ -48,19 +48,27 @@ describe UsersController do
     end
   end
 
-  describe "POST #update" do
+  describe "PUT #update" do
     it "should prevent update with a bad password" do
       user = FactoryGirl.create(:user, password: 'pass')
       request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user.username + ":" + user.password + "bad")
-      post :update
+      put :update, {:id => 1}
 
       response.status.should == 401
+    end
+
+    it "should return unprocessible entity if no username and password are provided" do
+      user = FactoryGirl.create(:user, password: 'pass')
+      request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user.username + ":" + user.password)
+      put :update, {:id => 1}
+
+      response.status.should == 400
     end
 
     it "should return OK with correct username and password, and update the password" do
       user = FactoryGirl.create(:user, password: 'pass')
       request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user.username + ":" + user.password)
-      post :update, {:password => '123'}
+      put :update, {:id => 1, :password => '123'}
 
       response.status.should == 200
       user = User.find_by_username(user.username)
@@ -72,7 +80,7 @@ describe UsersController do
       user1 = FactoryGirl.create(:user)
       user2 = FactoryGirl.create(:user)
       request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user1.username + ":" + user1.password)
-      post :update, {:username => user2.username}
+      put :update, {:id => 1, :username => user2.username}
 
       response.status.should == 422
       user1.reload
@@ -83,7 +91,7 @@ describe UsersController do
       user1 = FactoryGirl.create(:user)
       new_username = FactoryGirl.attributes_for(:user)[:username]
       request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user1.username + ":" + user1.password)
-      post :update, {:username => new_username}
+      put :update, {:id => 1, :username => new_username}
 
       response.status.should == 200
       user1.reload
