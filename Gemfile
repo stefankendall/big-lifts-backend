@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.11'
 gem 'bcrypt-ruby'
 gem "authlogic", "~> 3.2.0"
+gem 'newrelic_rpm'
 
 group :test, :development do
   gem 'sqlite3'
