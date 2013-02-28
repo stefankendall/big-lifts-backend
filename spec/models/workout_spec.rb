@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Log do
+describe Workout do
   it "should fully serialize logs" do
     log = FactoryGirl.build :log, :specific_workout => FactoryGirl.build(:w531)
     workout = FactoryGirl.build :workout, :user => FactoryGirl.build(:user), :logs => [log]
@@ -16,5 +16,10 @@ describe Log do
 
     json = ActiveSupport::JSON.decode(workout.to_json)
     json['logs'][0]['date'].should == timestamp
+  end
+
+  it "should prevent blank types" do
+    workout = FactoryGirl.build :workout, :type => ''
+    workout.should_not be_valid
   end
 end

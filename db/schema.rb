@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130206204238) do
+ActiveRecord::Schema.define(:version => 20130228034453) do
 
   create_table "logs", :force => true do |t|
     t.string   "name"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(:version => 20130206204238) do
     t.integer  "workout_id"
     t.datetime "created_at",            :null => false
     t.datetime "updated_at",            :null => false
+    t.string   "units"
   end
 
   create_table "users", :force => true do |t|
@@ -47,8 +48,9 @@ ActiveRecord::Schema.define(:version => 20130206204238) do
   create_table "workouts", :force => true do |t|
     t.integer  "user_id"
     t.integer  "workout_id", :limit => 255
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.datetime "created_at",                                     :null => false
+    t.datetime "updated_at",                                     :null => false
+    t.string   "type",                      :default => "5/3/1"
   end
 
 end
