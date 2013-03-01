@@ -50,7 +50,7 @@ ActiveRecord::Schema.define(:version => 20130228034453) do
     t.integer  "workout_id", :limit => 255
     t.datetime "created_at",                                     :null => false
     t.datetime "updated_at",                                     :null => false
-    t.string   "type",                      :default => "5/3/1"
+    t.string   "name",                      :default => "5/3/1"
   end
 
 end

@@ -19,7 +19,7 @@ describe Workout do
   end
 
   it "should prevent blank types" do
-    workout = FactoryGirl.build :workout, :type => ''
+    workout = FactoryGirl.build :workout, :name => ''
     workout.should_not be_valid
   end
 end

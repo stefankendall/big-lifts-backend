@@ -3,7 +3,7 @@ class LogController < ApplicationController
   before_filter :authenticate_user
 
   def create
-    workout = Workout.new(:workout_id => params[:workout_id])
+    workout = Workout.new(:workout_id => params[:workout_id], :name => params[:name])
 
     if params[:logs]
       params[:logs].each { |l| add_log_to_workout workout, l }

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "rspec"
 
 describe LogController do
   let(:user) { create_user() }
@@ -27,6 +28,18 @@ describe LogController do
     it "will save workouts with an associated log" do
       post :create, {:workout_id => 1, :logs => [{sets: 5}]}
       response.status.should == 200
+    end
+
+    it "will default workouts without a name to 5/3/1" do
+      post :create, {:workout_id => 1, :logs => [{sets: 5}]}
+      get :index
+      ActiveSupport::JSON.decode(response.body)[0]["name"].should == '5/3/1'
+    end
+
+    it "will save workouts with workout names" do
+      post :create, {:workout_id => 1, :name => 'StartingStrength', :logs => [{sets: 5}]}
+      get :index
+      ActiveSupport::JSON.decode(response.body)[0]["name"].should == 'StartingStrength'
     end
 
     it "will save log dates in unix timestamps with an associated log" do
