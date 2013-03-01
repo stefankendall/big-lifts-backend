@@ -32,6 +32,7 @@ describe LogController do
 
     it "will default workouts without a name to 5/3/1" do
       post :create, {:workout_id => 1, :logs => [{sets: 5}]}
+      response.status.should == 200
       get :index
       ActiveSupport::JSON.decode(response.body)[0]["name"].should == '5/3/1'
     end
