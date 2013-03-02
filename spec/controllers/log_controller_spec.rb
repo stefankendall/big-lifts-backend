@@ -86,11 +86,12 @@ describe LogController do
   end
 
   describe "DELETE #destroy" do
-    it "should delete existing workouts" do
-      post :create, {:workout_id => 1, :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
-      delete :destroy, {:id => 1}
+    it "should delete existing workouts by name" do
+      post :create, {:workout_id => 1, :name => '5/3/1', :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      post :create, {:workout_id => 1, :name => 'StartingStrength', :logs => [{sets: 5, specific: {type: '5/3/1', data: {cycle: 5}}}]}
+      delete :destroy, {:id => 1, :name => '5/3/1'}
       get :index
-      ActiveSupport::JSON.decode(response.body).length.should == 0
+      ActiveSupport::JSON.decode(response.body).length.should == 1
     end
   end
 

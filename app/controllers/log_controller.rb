@@ -12,7 +12,7 @@ class LogController < ApplicationController
 
     begin
       User.transaction do
-        @user.delete_workout_by_id workout.workout_id
+        @user.delete_workout_by_id_and_name workout.workout_id, workout.name
 
         @user.workouts() << workout
         @user.save!
@@ -43,7 +43,8 @@ class LogController < ApplicationController
   end
 
   def destroy
-    @user.workouts.destroy_all
+    name = params[:name] || '5/3/1'
+    @user.workouts().select { |w| w.name == name }.each { |w| w.destroy() }
     render :json => {}, :status => :ok
   end
 end

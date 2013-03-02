@@ -22,9 +22,17 @@ describe User do
 
   it "does not allow duplicate workouts" do
     user = FactoryGirl.create(:user, password: 'pass')
-    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :workout_id => 9)
-    user.workouts() << FactoryGirl.build(:workout, :logs => [FactoryGirl.build(:log)], :workout_id => 9)
+    user.workouts() << FactoryGirl.build(:workout, :name => '5/3/1', :logs => [FactoryGirl.build(:log)], :workout_id => 9)
+    user.workouts() << FactoryGirl.build(:workout, :name => '5/3/1', :logs => [FactoryGirl.build(:log)], :workout_id => 9)
 
     user.should_not be_valid
+  end
+
+  it "allows duplicate workouts by name" do
+    user = FactoryGirl.create(:user, password: 'pass')
+    user.workouts() << FactoryGirl.build(:workout, :name => '5/3/1', :logs => [FactoryGirl.build(:log)], :workout_id => 9)
+    user.workouts() << FactoryGirl.build(:workout, :name => 'StartingStrength', :logs => [FactoryGirl.build(:log)], :workout_id => 9)
+
+    user.should be_valid
   end
 end

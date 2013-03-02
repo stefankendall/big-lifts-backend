@@ -18,15 +18,15 @@ class User < ActiveRecord::Base
     }
   end
 
-  def delete_workout_by_id(workout_id)
-    self.workouts().select { |w| w.workout_id == workout_id }.each do |existing|
+  def delete_workout_by_id_and_name(workout_id, name)
+    self.workouts().select { |w| w.workout_id == workout_id && w.name == name }.each do |existing|
       self.workouts().delete existing
     end
   end
 
   private
   def no_duplicate_workouts
-    workout_ids = self.workouts().collect { |w| w.workout_id }
+    workout_ids = self.workouts().collect { |w| "#{w.workout_id}#{w.name}" }
     if workout_ids.length > 0 and workout_ids.length != workout_ids.uniq.length
       errors.add(:workouts, "Duplicate workout ids")
     end
