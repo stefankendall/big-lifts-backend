@@ -1,8 +1,7 @@
 require 'spec_helper'
-require "rspec"
 
 describe LogController do
-  let(:user) { create_user() }
+  let(:user) { FactoryGirl.create(:user) }
 
   before(:each) do
     request.env['HTTP_AUTHORIZATION'] = 'Basic ' + Base64.encode64(user.username + ":" + user.password)
@@ -93,11 +92,5 @@ describe LogController do
       get :index
       ActiveSupport::JSON.decode(response.body).length.should == 1
     end
-  end
-
-  def create_user
-    username = Faker::Internet.user_name
-    password = Faker::Internet.user_name
-    User.create(username: username, password: password)
   end
 end

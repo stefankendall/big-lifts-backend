@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 
   attr_accessible :username, :password
   has_many :workouts, :dependent => :destroy
+  has_many :polls, :dependent => :destroy
 
   validates :username, :presence => true, :uniqueness => true
   validates :password_digest, :presence => true
