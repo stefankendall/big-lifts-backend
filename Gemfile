@@ -5,6 +5,8 @@ gem 'bcrypt-ruby'
 gem "authlogic", "~> 3.2.0"
 gem 'newrelic_rpm'
 
+gem 'unicorn'
+
 group :test, :development do
   gem 'sqlite3'
   gem 'rspec-rails'
@@ -19,7 +21,6 @@ end
 
 group :production do
   gem 'pg'
-  gem 'thin'
 end
 
 group :assets do
