@@ -6,6 +6,7 @@ gem "authlogic", "~> 3.2.0"
 gem 'newrelic_rpm'
 
 gem 'unicorn'
+gem 'deep_cloneable'
 
 group :test, :development do
   gem 'sqlite3'
