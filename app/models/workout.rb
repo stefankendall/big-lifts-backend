@@ -2,6 +2,8 @@ class Workout < ActiveRecord::Base
   belongs_to :user
   has_many :logs, :autosave => true, :dependent => :destroy
 
+  default_scope includes(:logs)
+
   attr_accessible :workout_id, :logs, :name
 
   validates :workout_id, :presence => true
