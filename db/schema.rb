@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130410110732) do
+ActiveRecord::Schema.define(:version => 20130411112851) do
 
   create_table "logs", :force => true do |t|
     t.string   "name"
@@ -62,5 +62,7 @@ ActiveRecord::Schema.define(:version => 20130410110732) do
     t.datetime "updated_at",                                     :null => false
     t.string   "name",                      :default => "5/3/1"
   end
+
+  add_index "workouts", ["user_id"], :name => "index_workouts_on_user_id"
 
 end
