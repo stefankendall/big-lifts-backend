@@ -3,6 +3,8 @@ class Log < ActiveRecord::Base
   belongs_to :specific_workout, :polymorphic => true
   attr_accessible :date, :name, :notes, :reps, :sets, :weight, :workout, :units
 
+  default_scope includes(:specific_workout)
+
   def as_json(options={})
     json = super(options.merge(:include => [:specific_workout]))
     json['date'] = date.to_i
